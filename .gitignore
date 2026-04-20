@@ -1,0 +1,8 @@
+build/
+tmp/
+sstate-cache/
+downloads/
+poky/
+.vscode/
+.idea/
+*.log
