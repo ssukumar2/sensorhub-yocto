@@ -6,21 +6,22 @@ I built this to learn how real embedded Linux deployment works — taking a C++ 
 
 ## How it works
 
-The project uses the Yocto Project (kirkstone LTS release) to build a minimal Linux image for QEMU x86-64. A custom layer called meta-sensorhub contains a BitBake recipe that fetches, builds, and installs the sensorhub C++ client. When the image boots, the client starts automatically via a systemd service and begins sending telemetry to a configured backend.
+The project uses the Yocto Project (kirkstone LTS release) to build a minimal Linux image for QEMU x86-64. A custom layer called meta-sensorhub contains a BitBake recipe that fetches the sensorhub C++ client source from GitHub, builds it with CMake, and installs the binary into the image. A systemd service file ensures the client starts automatically on boot and restarts on failure.
 
-## Stack
+## What the layer contains
 
-- Yocto Project (kirkstone branch)
-- BitBake build system
-- QEMU x86-64 for emulation
-- Custom meta-sensorhub layer
-- systemd for service management
+The meta-sensorhub layer has a BitBake recipe that handles the full lifecycle: fetching source from the sensorhub GitHub repo, building with CMake against the cross-compilation toolchain, installing the binary to /usr/bin, and registering a systemd service. The service is configured to connect to a backend at a configurable URL and automatically restart if the client crashes.
 
 ## Building
 
-Set up the build environment:
+Clone poky and set up the environment:
 
+    git clone git://git.yoctoproject.org/poky -b kirkstone
     source poky/oe-init-build-env build
+
+Add the custom layer:
+
+    bitbake-layers add-layer ../meta-sensorhub
 
 Build the image:
 
@@ -30,9 +31,17 @@ Boot in QEMU:
 
     runqemu qemux86-64
 
-## Status
+## Stack
 
-Setting up the initial build environment and custom layer.
+- Yocto Project (kirkstone LTS)
+- BitBake build system
+- QEMU x86-64 for emulation
+- systemd for service management
+- CMake for cross-compiling the C++ client
+
+## Companion project
+
+The C++ client source lives at https://github.com/ssukumar2/sensorhub in the client-cpp directory.
 
 ## License
 
