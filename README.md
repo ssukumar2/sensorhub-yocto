@@ -8,6 +8,10 @@ I built this to learn how real embedded Linux deployment works — taking a C++ 
 
 The project uses the Yocto Project (kirkstone LTS release) to build a minimal Linux image for QEMU x86-64. A custom layer called meta-sensorhub contains a BitBake recipe that fetches the sensorhub C++ client source from GitHub, builds it with CMake, and installs the binary into the image. A systemd service file ensures the client starts automatically on boot and restarts on failure.
 
+## Build results
+
+The initial QEMU x86-64 image built successfully with Yocto kirkstone (4.0.35). The image boots to a login prompt, runs Linux 5.15.201, and supports networking out of the box. The custom meta-sensorhub layer is ready to be added to the build configuration to include the sensor client binary.
+
 ## What the layer contains
 
 The meta-sensorhub layer has a BitBake recipe that handles the full lifecycle: fetching source from the sensorhub GitHub repo, building with CMake against the cross-compilation toolchain, installing the binary to /usr/bin, and registering a systemd service. The service is configured to connect to a backend at a configurable URL and automatically restart if the client crashes.
