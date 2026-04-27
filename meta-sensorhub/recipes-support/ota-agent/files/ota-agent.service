@@ -1,0 +1,13 @@
+[Unit]
+Description=Sensorhub OTA update agent
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/ota-agent
+Restart=on-failure
+RestartSec=30
+
+[Install]
+WantedBy=multi-user.target
